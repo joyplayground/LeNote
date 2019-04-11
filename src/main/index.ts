@@ -41,14 +41,14 @@ function withCache(request: InterceptBufferProtocolRequest, callback: (steam: Bu
 }
 
 const defaultSecurityWebPreferences: WebPreferences = {
-  nodeIntegration: false,
+  nodeIntegration: true,
   nodeIntegrationInSubFrames: false,
   nodeIntegrationInWorker: false
 };
 
 function createWindow() {
-  protocol.interceptBufferProtocol('http', withCache);
-  protocol.interceptBufferProtocol('https', withCache);
+  // protocol.interceptBufferProtocol('http', withCache);
+  // protocol.interceptBufferProtocol('https', withCache);
   // session.defaultSession.webRequest.onBeforeRequest(withCache);
 
   let win = new BrowserWindow({
@@ -74,7 +74,7 @@ function createWindow() {
   let contentview = new BrowserView({
     webPreferences: defaultSecurityWebPreferences
   });
-  contentview.webContents.loadURL('http://www.baidu.com/pages/editor.html');
+  contentview.webContents.loadURL('http://localhost:8080/pages/editor.html');
   // contentview.setAutoResize({ width: true, height: true });
   // win.setBrowserView(contentview);
   win.addBrowserView(contentview);
@@ -113,7 +113,7 @@ function createWindow() {
   // 分别构建 html 交给 renderer 构建，所以在目录层次上不能通过 require 接过来
   // 不过目录规律一定，可以通过约定的方式解决文件引入的问题
   // win.loadFile(resolvePageHtml('pages/app'));
-  win.loadURL('http://www.baidu.com/pages/app.html');
+  win.loadURL('http://localhost:8080/pages/app.html');
 }
 
 app.on('ready', createWindow);

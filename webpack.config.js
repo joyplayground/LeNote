@@ -13,7 +13,8 @@ const common_config = {
   mode,
   output: {
     path: output_dir,
-    filename: '[name].js'
+    filename: '[name].js',
+    publicPath: 'http://localhost:8080/'
   },
   module: {
     rules: [
@@ -30,6 +31,7 @@ const common_config = {
   devtool: isProd ? 'source-map' : 'inline-source-map',
   devServer: {
     contentBase: output_dir,
+    port: '8080',
     hot: true
   },
   // 阻止 webpack 自定义的实现
@@ -52,17 +54,19 @@ function getRenderEntry() {
   });
   return entry;
 }
-console.log(resource.getPreCacheList());
 module.exports = [
   {
     ...common_config,
     target: 'electron-main',
     entry: {
-      app: './src/main/index.ts'
+      app: './src/main/index.ts',
+      preload: './src/main/preload.ts'
     },
-    plugins: [new webpack.DefinePlugin({
-      '__DEFINE_PRECACHE_LIST': JSON.stringify(resource.getPreCacheList())
-    })]
+    plugins: [
+      new webpack.DefinePlugin({
+        __DEFINE_PRECACHE_LIST: JSON.stringify(resource.getPreCacheList())
+      })
+    ]
   },
   {
     ...common_config,
