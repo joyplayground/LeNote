@@ -1,8 +1,8 @@
 const path = require('path');
-const fs = require('fs-extra');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const resource = require('./resource');
 const webpack = require('webpack');
+const express = require('express');
 
 const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 const isProd = mode === 'production';
@@ -32,17 +32,10 @@ const common_config = {
   devServer: {
     contentBase: output_dir,
     port: '8080',
-    hot: true
-  },
-  // 阻止 webpack 自定义的实现
-  node: {
-    console: false,
-    global: false,
-    process: false,
-    __filename: false,
-    __dirname: false,
-    Buffer: false,
-    setImmediate: false
+    hot: true,
+    before(app) {
+      app.use('/static', express.static(path.join(__dirname, 'assets')));
+    }
   }
 };
 // 管理 render 独立页面
@@ -74,7 +67,17 @@ module.exports = [
       new webpack.DefinePlugin({
         __DEFINE_PRECACHE_LIST: JSON.stringify(resource.getPreCacheList())
       })
-    ]
+    ],
+    // 阻止 webpack 自定义的实现
+    node: {
+      console: false,
+      global: false,
+      process: false,
+      __filename: false,
+      __dirname: false,
+      Buffer: false,
+      setImmediate: false
+    }
   },
   // render-process
   {

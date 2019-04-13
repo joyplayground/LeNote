@@ -4,49 +4,44 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>首页</title>
-    <style>
-      html,body {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-        height: 100%;
-      }
-      body {
-        outline: 1px solid red;
-      }
-      .app-layout {
-        display: flex;
-        height: 100%;
-        flex-direction: row;
-      }
-      .app-menu {
-        width: 120px;
-        align-self: stretch;
-      }
-      .app-wrapper {
-        flex: 1;
-        align-self: stretch;
-        display: flex;
-        flex-direction: column;
-      }
-      .app-top {
-        height: 55px;
-      }
-      .app-content {
-        flex: 1;
-      }
-    </style>
+    <link rel="stylesheet" href="/static/editor.md/css/editormd.min.css" />
+    <title>工作笔记</title>
   </head>
+  <style>
+    html, body {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      min-height: 100%;
+      overflow: hidden;
+    }
+  </style>
   <bod>
-    <div class="app-layout">
-      <div class="app-menu">
-        我是左侧菜单
-      </div>
-      <div class="app-wrapper">
-          <div class="app-top">我是窗口顶部工具栏</div>
-          <div class="app-content">我是内容区域</div>
-      </div>
+    <div id="editormd">
+      <textarea style="display:none;">
+      </textarea>
     </div>
+    <script type="text/javascript" src="/static/editor.md/vendor/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/editor.md/editormd.min.js"></script>
+    <script type="text/javascript">
+      var editor = editormd("editormd", {
+        path: '/static/editor.md/lib/',
+        delay: 100,
+        syncScrolling: 'single',
+        markdown: `# 开动吧`,
+        emoji : true,
+        taskList : true,
+        tocm: true,         // Using [TOCM]
+        tex: true,                   // 开启科学公式TeX语言支持，默认关闭
+        flowChart: true,             // 开启流程图支持，默认关闭
+        sequenceDiagram: true,
+        theme: "dark",
+        previewTheme: "dark",
+        editorTheme: "pastel-on-dark",
+        imageUpload: true,
+        imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+        imageUploadURL: "./php/upload.php"
+      });
+    </script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-import { BrowserWindow, protocol, WebPreferences } from 'electron';
+import { BrowserWindow, protocol, WebPreferences, Menu, globalShortcut } from 'electron';
 import withCache from './cache';
 // 通过 webRequest 拦截网络请求，从而实现离线在线的转换控制呢?
 const defaultSecurityWebPreferences: WebPreferences = {
@@ -19,7 +19,10 @@ function createWindow(url: string, shouldCache: boolean): BrowserWindow {
   let reload_time = 0,
     last_crash_time = 0;
 
+  Menu.setApplicationMenu(null);
+
   let win = new BrowserWindow({
+    titleBarStyle: 'hiddenInset',
     show: false,
     width: 800,
     height: 600,
