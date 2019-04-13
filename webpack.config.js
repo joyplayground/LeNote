@@ -55,12 +55,20 @@ function getRenderEntry() {
   return entry;
 }
 module.exports = [
+  // pre-loader render-process
+  {
+    ...common_config,
+    target: 'electron-renderer',
+    entry: {
+      preload: './src/main/preload.ts'
+    }
+  },
+  // main-process
   {
     ...common_config,
     target: 'electron-main',
     entry: {
-      app: './src/main/index.ts',
-      preload: './src/main/preload.ts'
+      app: './src/main/index.ts'
     },
     plugins: [
       new webpack.DefinePlugin({
@@ -68,9 +76,10 @@ module.exports = [
       })
     ]
   },
+  // render-process
   {
     ...common_config,
-    target: 'electron-renderer',
+    target: 'web',
     entry: getRenderEntry(),
     plugins: [
       ...resource.getRenderPages().map(page => {

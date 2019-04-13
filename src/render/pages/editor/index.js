@@ -3,4 +3,4 @@ function rnd() {
 }
 setInterval(() => {
   document.body.style.color = `rgb(${rnd()}, ${rnd()}, ${rnd()})`;
-}, 1000);
+}, 100);
