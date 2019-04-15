@@ -38,15 +38,16 @@ const common_config = {
             options: {
               ident: "postcss",
               plugins: () => [
-                PostcssPresetEnv({}),
+                require("precss")({}),
+                require("postcss-normalize")({
+                  forceImport: true
+                }),
                 require("stylelint")({
                   extends: "stylelint-config-recommended",
                   rules: {}
                 }),
                 require("doiuse")({}),
-                require("postcss-normalize")({
-                  forceImport: true
-                })
+                PostcssPresetEnv({})
               ]
             }
           }
@@ -102,7 +103,7 @@ module.exports = [
           chunks: [page.name],
           minify: isProd
         });
-      }),
+      })
       // new InjectAssetsPlugin()
     ]
   }),

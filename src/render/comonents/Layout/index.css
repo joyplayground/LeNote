@@ -1,0 +1,16 @@
+.layout {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  align-items: stretch;
+
+  & .sidebar {
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  & .sidebar-item {
+    flex: 0 0 80px;
+  }
+}

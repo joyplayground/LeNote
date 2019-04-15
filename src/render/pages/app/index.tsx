@@ -1,11 +1,15 @@
+import "./index.css";
 import * as React from "react";
 import { render } from "react-dom";
-
-import "./index.css";
+import AppLayout from "../../comonents/Layout";
 
 class App extends React.PureComponent {
   render() {
-    return <div>hello world!</div>;
+    return (
+      <AppLayout>
+        <div>hello world!</div>
+      </AppLayout>
+    );
   }
 }
 
