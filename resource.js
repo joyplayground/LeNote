@@ -15,14 +15,14 @@ function getRenderPages() {
   const items = klaw(join(render_dir, "pages"), { nofile: true });
   return items
     .filter(item => {
-      return fs.existsSync(join(item.path, "index.ts"));
+      return fs.existsSync(join(item.path, "index.tsx"));
     })
     .map(item => {
       return relative(render_dir, item.path);
     })
     .map(item => {
       const name = item.split(sep).join("/");
-      const js = join(render_dir, item, "index.ts");
+      const js = join(render_dir, item, "index.tsx");
       const template = join(render_dir, item, "index.html");
       return { name, js, template };
     });

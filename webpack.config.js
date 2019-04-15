@@ -3,7 +3,10 @@ const HTMLWebpackPlugin = require("html-webpack-plugin");
 const resource = require("./resource");
 const express = require("express");
 const merge = require("webpack-merge");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const InjectAssetsPlugin = require("./webpack-plugin-inject-assets");
+const PostcssPresetEnv = require("postcss-preset-env");
 
 const mode =
   process.env.NODE_ENV === "development" ? "development" : "production";
@@ -21,14 +24,38 @@ const common_config = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
         use: "ts-loader"
+      },
+      {
+        test: /\.css$/,
+        use: [
+          isProd ? MiniCssExtractPlugin.loader : "style-loader",
+          { loader: "css-loader", options: { importLoaders: 1 } },
+          {
+            loader: "postcss-loader",
+            options: {
+              ident: "postcss",
+              plugins: () => [
+                PostcssPresetEnv({}),
+                require("stylelint")({
+                  extends: "stylelint-config-recommended",
+                  rules: {}
+                }),
+                require("doiuse")({}),
+                require("postcss-normalize")({
+                  forceImport: true
+                })
+              ]
+            }
+          }
+        ]
       }
     ]
   },
   resolve: {
-    extensions: [".js", ".ts", ".css", ".json", ".html"]
+    extensions: [".js", ".ts", ".tsx", ".css", ".json", ".html"]
   },
   devtool: isProd ? "source-map" : "inline-source-map",
   devServer: {
@@ -55,7 +82,13 @@ module.exports = [
     target: "electron-renderer",
     entry: {
       preload: "./src/main/preload.ts"
-    }
+    },
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: isProd ? "[name]@[hash].css" : "[name].css",
+        chunkFilename: isProd ? "[id]@[hash].css" : "[id].css"
+      })
+    ]
   }),
   // render-process
   merge(common_config, {
@@ -70,7 +103,7 @@ module.exports = [
           minify: isProd
         });
       }),
-      new InjectAssetsPlugin()
+      // new InjectAssetsPlugin()
     ]
   }),
   // main-process
